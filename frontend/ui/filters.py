@@ -1,7 +1,7 @@
 from PySide6.QtWidgets import QWidget, QVBoxLayout, QHBoxLayout, QLabel, QLineEdit, QPushButton
 import requests
 
-API_URL = "http://127.0.0.1:8000"
+API_URL = "https://heis-backend-ihkr.onrender.com"
 
 class Filters(QWidget):
     def __init__(self):

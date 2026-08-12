@@ -10,7 +10,7 @@ from .charts import (
 from .plot_widget import PlotWidget
 import requests
 
-API_URL = "http://127.0.0.1:8000"
+API_URL = "https://heis-backend-ihkr.onrender.com"
 
 class AnalyticsPanel(QWidget):
     def __init__(self):

@@ -2,7 +2,7 @@ import plotly.graph_objects as go
 import plotly.express as px
 import requests
 
-API_URL = "http://127.0.0.1:8000"
+API_URL = "https://heis-backend-ihkr.onrender.com"
 
 # ---------------- BASIC CHARTS ----------------
 def build_year_comparison_chart():
