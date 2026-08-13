@@ -51,13 +51,31 @@ def init_db_from_csv():
                 ms_code=row.get("MsCode"),
                 cat_code=row.get("CatCode"),
                 hec_code=row.get("HECCode"),
-                estimate=float(str(row.get("Estimate")).strip()),
-                rse=float(str(row.get("RSE")).strip()),
-                lower_cib=float(str(row.get("LowerCIB")).strip()),
-                upper_cib=float(str(row.get("UpperCIB")).strip()),
+                estimate=safe_float(row.get("Estimate")),
+                rse=safe_float(row.get("RSE")),
+                lower_cib=safe_float(row.get("LowerCIB")),
+                upper_cib=safe_float(row.get("UpperCIB")),
                 flag=row.get("Flag")
             )
             db.add(exp)
 
         db.commit()
         print("✅ База успішно заповнена з CSV.")
+
+def safe_float(value):
+    """
+    Перетворює значення на float.
+    Якщо value порожнє, None або нечислове - повертає None.
+    """
+    if value is None:
+        return None
+
+    value = str(value).strip()
+
+    if value == "":
+        return None
+
+    try:
+        return float(value)
+    except ValueError:
+        return None
