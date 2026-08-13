@@ -1,5 +1,6 @@
 from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
+from .models import Expenditure
 
 from .database import get_db
 from .crud import get_all_expenditures, get_by_year, get_by_category
@@ -56,7 +57,7 @@ router = APIRouter()
 @router.get("/expenditures")
 def route_all(db: Session = Depends(get_db)):
     data = db.query(Expenditure).all()
-    print(f"⚙️ Loaded {len(data)} records")
+    print(f"Loaded {len(data)} records")
     return [
         {
             "id": item.id,
