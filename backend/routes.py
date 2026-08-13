@@ -53,9 +53,27 @@ except ImportError:
 router = APIRouter()
 
 # ---------------- BASIC CRUD ----------------
-@router.get("/expenditures", response_model=list[ExpenditureSchema])
+@router.get("/expenditures")
 def route_all(db: Session = Depends(get_db)):
-    return get_all_expenditures(db)
+    data = db.query(Expenditure).all()
+    print(f"⚙️ Loaded {len(data)} records")
+    return [
+        {
+            "id": item.id,
+            "table": item.table,
+            "year": item.year,
+            "ms_code": item.ms_code,
+            "cat_code": item.cat_code,
+            "hec_code": item.hec_code,
+            "estimate": item.estimate,
+            "rse": item.rse,
+            "lower_cib": item.lower_cib,
+            "upper_cib": item.upper_cib,
+            "flag": item.flag
+        }
+        for item in data
+    ]
+
 
 @router.get("/expenditures/year/{year}", response_model=list[ExpenditureSchema])
 def route_year(year: int, db: Session = Depends(get_db)):
