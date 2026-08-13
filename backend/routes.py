@@ -3,16 +3,52 @@ from sqlalchemy.orm import Session
 
 from .database import get_db
 from .crud import get_all_expenditures, get_by_year, get_by_category
-from .crud_extended import get_by_hec, get_by_estimate_range, get_category_totals, get_year_totals
+from .crud_extended import (
+    get_by_hec,
+    get_by_estimate_range,
+    get_category_totals,
+    get_year_totals
+)
 from .analytics import calculate_rse_stats, find_anomalies
-from .aggregations import get_monthly_totals, get_top_categories
-from .predictions import simple_linear_prediction
-from .trends import get_yearly_trend
-from .trends_categories import get_category_trends
-from .heatmap import build_heatmap_data
-from .anomaly_iqr import detect_iqr_anomalies
-from .anomaly_mad import detect_mad_anomalies
 from .schemas import ExpenditureSchema
+
+# Безпечні імпорти — якщо модуль відсутній, не викликає помилку
+try:
+    from .aggregations import get_monthly_totals, get_top_categories
+except ImportError:
+    get_monthly_totals = lambda db: {"error": "aggregations module missing"}
+    get_top_categories = lambda db: {"error": "aggregations module missing"}
+
+try:
+    from .predictions import simple_linear_prediction
+except ImportError:
+    simple_linear_prediction = lambda db: {"error": "predictions module missing"}
+
+try:
+    from .trends import get_yearly_trend
+except ImportError:
+    get_yearly_trend = lambda db: {"error": "trends module missing"}
+
+try:
+    from .trends_categories import get_category_trends
+except ImportError:
+    get_category_trends = lambda db: {"error": "trends_categories module missing"}
+
+try:
+    from .heatmap import build_heatmap_data
+except ImportError:
+    build_heatmap_data = lambda db: {"error": "heatmap module missing"}
+
+try:
+    from .anomaly_iqr import detect_iqr_anomalies
+except ImportError:
+    detect_iqr_anomalies = lambda db: {"error": "anomaly_iqr module missing"}
+
+try:
+    from .anomaly_mad import detect_mad_anomalies
+except ImportError:
+    detect_mad_anomalies = lambda db: {"error": "anomaly_mad module missing"}
+
 
 router = APIRouter()
 
