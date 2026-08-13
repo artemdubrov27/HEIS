@@ -2,14 +2,11 @@ import os
 import pandas as pd
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker, declarative_base, Session
-from .models import Expenditure
 
-# === 1. Правильний абсолютний шлях до бази ===
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 DB_PATH = os.path.join(BASE_DIR, "../data/heis.db")
 DATABASE_URL = f"sqlite:///{DB_PATH}"
 
-# === 2. Створення engine та сесії ===
 engine = create_engine(
     DATABASE_URL,
     connect_args={"check_same_thread": False}
@@ -19,7 +16,6 @@ SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 Base = declarative_base()
 
 
-# === 3. Функція для отримання сесії ===
 def get_db():
     db = SessionLocal()
     try:
@@ -28,16 +24,15 @@ def get_db():
         db.close()
 
 
-# === 4. Автоматичне створення таблиць ===
 def create_tables():
     Base.metadata.create_all(bind=engine)
 
 
-# === 5. Автоматичне заповнення бази з CSV ===
 def init_db_from_csv():
+    from .models import Expenditure   # <— імпорт всередині функції, не на рівні модуля
+
     db: Session = SessionLocal()
 
-    # Якщо таблиця порожня — заповнюємо її
     if db.query(Expenditure).count() == 0:
         print("⚠ База порожня — завантажую CSV...")
 
@@ -66,5 +61,3 @@ def init_db_from_csv():
 
         db.commit()
         print("✅ База успішно заповнена з CSV.")
-    else:
-        print("✔ База вже містить дані — CSV не завантажується.")
